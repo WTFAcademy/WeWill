@@ -2,7 +2,7 @@ import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import AppRouter from 'src/routes'
 import 'virtual:uno.css'
-import './index.css'
+import 'src/index.css'
 import '@rainbow-me/rainbowkit/styles.css';
 
 import {
@@ -46,7 +46,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <RainbowKitProvider chains={chains}>
         <BrowserRouter>
           <AppRouter />
-        </BrowserRouter>,
+        </BrowserRouter>
       </RainbowKitProvider>
     </WagmiConfig>
 )

@@ -349,10 +349,19 @@ template {
 }
 
 a{
-  text-decoration: none;
+  text-decoration: none=
   color: #000;
 }
+ul{
+  margin: 0;
+  padding: 0;
+}
+li{
+  list-style-type: none;
+}
 
-p{
+html, body, #root{
+  width: 100%;
+  height: 100%;
   margin: 0;
 }
