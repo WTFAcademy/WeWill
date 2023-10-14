@@ -3,11 +3,16 @@ import { Routes, Route } from "react-router-dom";
 import Login from "src/pages/login";
 import Sponsor from "src/pages/sponsor";
 import User from "src/pages/user";
+import Flag from "src/pages/flag";
 
 const rouers: { path: string; el: () => JSX.Element }[] = [
   {
     path: "*",
     el: Login,
+  },
+  {
+    path: 'Flag',
+    el: Flag,
   },
   {
     path: "sponsor",
