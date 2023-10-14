@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@rainbow-me/rainbowkit": "^1.1.1",
+    "@types/node": "^20.8.6",
     "gsap": "^3.12.2",
     "jotai": "^2.4.3",
     "react": "^18.2.0",
