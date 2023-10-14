@@ -43,10 +43,10 @@ const wagmiConfig = createConfig({
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <WagmiConfig config={wagmiConfig}>
-      <RainbowKitProvider chains={chains}>
-        <BrowserRouter>
-          <AppRouter />
-        </BrowserRouter>
-      </RainbowKitProvider>
-    </WagmiConfig>
+    <RainbowKitProvider chains={chains}>
+      <BrowserRouter>
+        <AppRouter />
+      </BrowserRouter>
+    </RainbowKitProvider>
+  </WagmiConfig>
 )

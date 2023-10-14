@@ -6,6 +6,23 @@ function Login() {
   const { isConnected } = useAccount();
   const navigate = useNavigate()
 
+
+  const flagList: {
+    id: string,
+    title: string,
+    desc: string,
+    cash: number,
+    endTime: Date,
+  }[] = [
+    {
+      id: "",
+      title: "/sponsor",
+      desc: "发起人",
+      cash: 0.05,
+      endTime: new Date('2023/10/16 23:00')
+    },
+  ];
+
   const identifies: {
     avatar: string;
     url: string;

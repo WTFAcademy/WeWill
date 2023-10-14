@@ -1,8 +1,46 @@
 import { useAccount } from 'wagmi'
+import { createPublicClient, http } from 'viem'
+import { mainnet } from 'viem/chains'
+import { useState, useEffect } from 'react'
+
+import { account, walletClient } from 'src/config/'
+import { wagmiAbi } from 'src/config/abi'
 
 function Flag() {
+    const [blockNumer, setBlockNumber] = useState<bigint>();
 
     const { address, isConnected } = useAccount()
+
+    const client = createPublicClient({
+        chain: mainnet,
+        transport: http(),
+    })
+
+    const getDDD = async () => {
+        const nnn = await client.getBlockNumber();
+        setBlockNumber(nnn);
+    }
+
+    // const { request } = await publicClient.simulateContract({
+    //     account,
+    //     address: '0xFBA3912Ca04dd458c843e2EE08967fC04f3579c2',
+    //     abi: wagmiAbi,
+    //     functionName: 'mint',
+    // })
+    // await walletClient.writeContract(request)
+
+    useEffect(function(){
+        getDDD();
+    },[])
+
+    const stacking = async () => {
+        await walletClient.writeContract({
+            address: '0xFBA3912Ca04dd458c843e2EE08967fC04f3579c2',
+            abi: wagmiAbi,
+            functionName: 'mint',
+            account,
+        })
+    }
 
     return (
         <div className="relative flex flex-col justify-start items-center w-full min-h-100vh">
@@ -14,9 +52,15 @@ function Flag() {
                 </div>
             </div>
             <div className="relative w-70% mt-50px">
+                <div className="relative mb-30px">
+                    <h2 className="text-xl font-semibold leading-3 text-gray-900">质押金额</h2>
+                    <h1 className="mt-1 text-2xl leading-6 text-blue-700">
+                    0.05 ETH
+                    </h1>
+                </div>
                 <h2 className="text-xl font-semibold leading-3 text-gray-900">活动要求</h2>
                 <p className="mt-1 text-sm leading-6 text-gray-600">
-                    This information will be displayed publicly so be careful what you share.
+                   {/* {blockNumer} */}
                 </p>
                 <div className="relative w-full mt-30px border border-solid border-gray-300 rounded p-24px box-border">
                     <p className="text-lg text-black">1. XXXXXXXXXX</p>
@@ -29,7 +73,7 @@ function Flag() {
                 </div>
             </div>
             <div className="relative mt-30px flex justify-center">
-                <div className="rounded-md cursor-pointer bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                <div onClick={stacking} className="rounded-md cursor-pointer bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                 参与本次 Flag
                 </div>
             </div>

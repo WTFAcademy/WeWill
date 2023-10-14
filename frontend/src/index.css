@@ -349,8 +349,11 @@ template {
 }
 
 a{
-  text-decoration: none=
+  text-decoration: none;
   color: #000;
+}
+p{
+  margin: 0;
 }
 ul{
   margin: 0;
