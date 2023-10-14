@@ -1,41 +1,66 @@
-import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useAccount, useConnect, useDisconnect } from 'wagmi'
-import { InjectedConnector } from 'wagmi/connectors/injected'
-import { Link } from 'react-router-dom'
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useAccount } from "wagmi";
+import { useNavigate } from 'react-router-dom'
 
 function Login() {
+  const { isConnected } = useAccount();
+  const navigate = useNavigate()
 
-    const { address, isConnected } = useAccount()
-    const { connect } = useConnect({
-        connector: new InjectedConnector(),
-    })
-    const { disconnect } = useDisconnect()
+  const identifies: {
+    avatar: string;
+    url: string;
+    name: string;
+    describe: string[];
+  }[] = [
+    {
+      avatar: "",
+      url: "/sponsor",
+      name: "发起人",
+      describe: ["创建Flag", "创建Flag", "创建Flag", "创建Flag"],
+    },
+    {
+      avatar: "",
+      url: "/user",
+      name: "用户",
+      describe: [
+        "查看Flag列表",
+        "查看Flag列表",
+        "查看Flag列表",
+        "查看Flag列表",
+      ],
+    },
+  ];
 
-    return (
-        <div className="relative flex-col justify-end items-center w-full h-100vh p-5 box-border">
-            <div className="w-full flex justify-end">
-                <div>
-                    <ConnectButton />
-                </div>
+  return (
+    <div className="flex flex-col h-screen">
+      <div className="flex justify-end p-2">
+        <ConnectButton />
+      </div>
+      {isConnected && (
+        <div className="flex flex-1 justify-center items-center gap-8" >
+          {identifies.map((i, index) => (
+            <div
+              key={index}
+              onClick={() => navigate(i.url)}
+              className="hover:shadow-lg rounded-2 min-w-200px border-1px border-solid overflow-hidden border-#ccc/30"
+            >
+              <div className="flex justify-center py-4 flex-col items-center">
+                <div className="bg-#ccc w-16 h-16 rounded-full" />
+                <span className="mt-4">成为{i.name}</span>
+              </div>
+              <ul className="bg-#f5f5f5 py-8 text-center">
+                {i.describe.map((d, index) => (
+                  <li key={index} className="my-1">
+                    {d}
+                  </li>
+                ))}
+              </ul>
             </div>
-            {isConnected && 
-                <div className="relativer">
-                    <div>已连接</div>
-                    <div>连接地址为: {address}</div>
-
-                    <div className="relative w-full mt-100px flex justify-center items-center">
-                        <div className="relative w-200px mx-5 flex justify-center items-center bg-blue-5 cursor-pointer">
-                            <Link to='/sponsor'>我是发起者</Link>
-                        </div>
-                        <div className="relative w-200px mx-5 flex justify-center items-center bg-green-5 cursor-pointer">
-                            <Link to='/user'>我是用户</Link>
-                        </div>
-                    </div>
-                </div>
-            }
-            
+          ))}
         </div>
-    )
+      )}
+    </div>
+  );
 }
 
-export default Login
+export default Login;
