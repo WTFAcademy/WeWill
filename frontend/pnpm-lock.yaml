@@ -8,6 +8,9 @@ dependencies:
   '@rainbow-me/rainbowkit':
     specifier: ^1.1.1
     version: 1.1.1(@types/react@18.2.28)(react-dom@18.2.0)(react@18.2.0)(viem@1.16.5)(wagmi@1.4.3)
+  jotai:
+    specifier: ^2.4.3
+    version: 2.4.3(@types/react@18.2.28)(react@18.2.0)
   react:
     specifier: ^18.2.0
     version: 18.2.0
@@ -3117,6 +3120,22 @@ packages:
     resolution: {integrity: sha512-3TV69ZbrvV6U5DfQimop50jE9Dl6J8O1ja1dvBbMba/sZ3YBEQqJ2VZRoQPVnhlzjNtU1vaXRZVrVjU4qtm8yA==}
     hasBin: true
     dev: true
+
+  /jotai@2.4.3(@types/react@18.2.28)(react@18.2.0):
+    resolution: {integrity: sha512-CSAHX9LqWG5WCrU8OgBoZbBJ+Bo9rQU0mPusEF4e0CZ/SNFgurG26vb3UpgvCSJZgYVcUQNiUBM5q86PA8rstQ==}
+    engines: {node: '>=12.20.0'}
+    peerDependencies:
+      '@types/react': '>=17.0.0'
+      react: '>=17.0.0'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      react:
+        optional: true
+    dependencies:
+      '@types/react': 18.2.28
+      react: 18.2.0
+    dev: false
 
   /js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
