@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MIT
+// WeWill v0.0.0
 pragma solidity ^0.8.0;
 
 /// @notice A struct representing a record for a submitted flag.
