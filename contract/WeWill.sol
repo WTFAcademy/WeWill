@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MIT
+// WeWill v0.0.0
 pragma solidity ^0.8.0;
 
 /// @notice A struct representing a record for a submitted flag.
@@ -17,11 +18,13 @@ struct FlagRecord {
 
 
 contract WeWill {
+    // Events emitted by the contract for various activities.
     event Registered(bytes32 indexed flagUid, address indexed creator, FlagRecord flagRecord);
     event Joined(bytes32 indexed flagUid, address indexed participant, uint256 value);
     event Completed(bytes32 indexed flagUid, address indexed participant, uint256 timestamp);
     event Claimed(bytes32 indexed flagUid, address indexed participant, uint256 reward);
 
+    // Errors that can be thrown by the contract.
     error AlreadyExists();
     error FlagNotExists();
     error FlagNotActive();
@@ -36,7 +39,9 @@ contract WeWill {
     error FlagNotExpire();
     error ParticipantAlreadyClaimed();
 
+    // Constant to represent empty unique identifiers (UIDs).
     bytes32 constant EMPTY_UID = 0;
+    // Mappings to store flag records, participants and other related data.
     mapping(bytes32 => FlagRecord) public flagRecords;
     mapping(bytes32 => mapping(address => bool)) public flagParticipants;
     mapping(bytes32 => uint256) public flagParticipantsNum;
@@ -47,11 +52,12 @@ contract WeWill {
     mapping(bytes32 => mapping(address => bool)) public flagParticipantsClaim;
     mapping(bytes32 => uint256) public flagClaimNum;
 
-    /// Create flag
+    /// @notice Function to create a new flag.
     function createFlag(string calldata title, string calldata description, uint96 mode, 
         bytes calldata data, uint256 startTime, uint256 expireTime, uint256 depositValue, 
         uint256 maxParticipants) external payable returns (bytes32){
 
+        // Creating a new flag record.
         FlagRecord memory flagRecord = FlagRecord({
             flagUid: EMPTY_UID,
             title: title,
@@ -86,7 +92,7 @@ contract WeWill {
         return flagRecords[flagUid];
     }
 
-    /// Join flag
+    /// @notice Function to join a flag.
     function joinFlag(bytes32 flagUid) external payable {
         FlagRecord memory flagRecord = flagRecords[flagUid];
         uint256 participantsNum = flagParticipantsNum[flagUid];
@@ -119,7 +125,7 @@ contract WeWill {
         emit Joined(flagUid, msg.sender, msg.value);
     }
 
-    /// complete flag
+    /// @notice Function to mark a flag as completed.
     function completeFlag(bytes32 flagUid) public{
         FlagRecord memory flagRecord = flagRecords[flagUid];
         if(flagRecord.flagUid != flagUid){
@@ -144,7 +150,7 @@ contract WeWill {
         emit Completed(flagUid, msg.sender, block.timestamp);
     }
 
-    /// claim rewards from completed flag after it expires
+    /// @notice Function to claim rewards after a flag is completed.
     function claimFlag(bytes32 flagUid) public{
         FlagRecord memory flagRecord = flagRecords[flagUid];
         if(flagRecord.flagUid != flagUid){
@@ -169,12 +175,12 @@ contract WeWill {
         uint256 ClaimAmount = flagTotalReward[flagUid]/flagSuccessNum[flagUid];
         flagCurrentReward[flagUid] -= ClaimAmount;
 
-        payable(address(this)).transfer(ClaimAmount);
+        payable(msg.sender).transfer(ClaimAmount);
         
         emit Claimed(flagUid, msg.sender, ClaimAmount);
     }
 
-    /// view, Check if a flag is completed by 
+    /// @notice Function to check if a participant has completed a flag.
     function qualifiedParticipant(bytes32 flagUid, address participant) public view returns (bool){
         FlagRecord memory flagRecord = flagRecords[flagUid];
 
@@ -186,23 +192,20 @@ contract WeWill {
         }
         (address contractAddr, uint256 tokenId) = abi.decode(flagRecord.data, (address, uint256));
         
-        if(IERC1155(contractAddr).balanceOf(participant, tokenId) > 0){
-            return true;
-        }else{
-            return false;
-        }
+        return IERC1155(contractAddr).balanceOf(participant, tokenId) > 0;
     }
 
-    /// @dev Calculates a UID for a given flag.
+    /// @dev Function to calculate a unique identifier for a flag.
     /// @param flagRecord The input flag.
     /// @return flag UID.
-    function _getUID(FlagRecord memory flagRecord) private pure returns (bytes32) {
+    function _getUID(FlagRecord memory flagRecord) internal pure returns (bytes32) {
         return keccak256(abi.encodePacked(flagRecord.title, flagRecord.description, flagRecord.creator, 
             flagRecord.mode, flagRecord.data, flagRecord.startTime, flagRecord.expireTime, 
             flagRecord.depositValue,flagRecord.maxParticipants));
     }
 }
 
+// Interface for interacting with the ERC1155 token standard.
 interface IERC1155{
     function balanceOf(address account, uint256 id) external view returns (uint256);
 }
