@@ -1,4 +1,4 @@
-function Sponsor() {
+function createFlag() {
     return (
         <form>
             <div className="space-y-12">
@@ -48,4 +48,4 @@ function Sponsor() {
 }
 
 
-export default Sponsor
+export default createFlag
