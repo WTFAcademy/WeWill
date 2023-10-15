@@ -20,6 +20,7 @@ contract WeWill {
     event Registered(bytes32 indexed flagUid, address indexed creator, FlagRecord flagRecord);
     event Joined(bytes32 indexed flagUid, address indexed participant, uint256 value);
     event Completed(bytes32 indexed flagUid, address indexed participant, uint256 timestamp);
+    event Claimed(bytes32 indexed flagUid, address indexed participant, uint256 reward);
 
     error AlreadyExists();
     error FlagNotExists();
@@ -33,7 +34,7 @@ contract WeWill {
     error ParticipantAlreadyCompleted();
     error ParticipantNotCompleted();
     error FlagNotExpire();
-    error ParticipantAlreadyWithdrawed();
+    error ParticipantAlreadyClaimed();
 
     bytes32 constant EMPTY_UID = 0;
     mapping(bytes32 => FlagRecord) public flagRecords;
@@ -43,8 +44,8 @@ contract WeWill {
     mapping(bytes32 => uint256) public flagSuccessNum;
     mapping(bytes32 => uint256) public flagTotalReward;
     mapping(bytes32 => uint256) public flagCurrentReward;
-    mapping(bytes32 => mapping(address => bool)) public flagParticipantsWithdraw;
-    mapping(bytes32 => uint256) public flagWithdrawNum;
+    mapping(bytes32 => mapping(address => bool)) public flagParticipantsClaim;
+    mapping(bytes32 => uint256) public flagClaimNum;
 
     /// Create flag
     function createFlag(string calldata title, string calldata description, uint96 mode, 
@@ -143,8 +144,8 @@ contract WeWill {
         emit Completed(flagUid, msg.sender, block.timestamp);
     }
 
-    /// withdraw completed flag after it expires
-    function withdrawFlag(bytes32 flagUid) public{
+    /// claim rewards from completed flag after it expires
+    function claimFlag(bytes32 flagUid) public{
         FlagRecord memory flagRecord = flagRecords[flagUid];
         if(flagRecord.flagUid != flagUid){
             revert FlagNotExists();
@@ -158,18 +159,19 @@ contract WeWill {
         if(flagParticipantsSuccess[flagUid][msg.sender] == false){
             revert ParticipantNotCompleted();
         }
-        if(flagParticipantsWithdraw[flagUid][msg.sender] == true){
-            revert ParticipantAlreadyWithdrawed();
+        if(flagParticipantsClaim[flagUid][msg.sender] == true){
+            revert ParticipantAlreadyClaimed();
         }
         
-        flagParticipantsWithdraw[flagUid][msg.sender] = true;
-        flagWithdrawNum[flagUid] += 1;
+        flagParticipantsClaim[flagUid][msg.sender] = true;
+        flagClaimNum[flagUid] += 1;
 
-        uint256 withdrawAmount = flagTotalReward[flagUid]/flagSuccessNum[flagUid];
-        flagCurrentReward[flagUid] -= withdrawAmount;
+        uint256 ClaimAmount = flagTotalReward[flagUid]/flagSuccessNum[flagUid];
+        flagCurrentReward[flagUid] -= ClaimAmount;
 
-        payable(address(this)).transfer(withdrawAmount);
-        emit Completed(flagUid, msg.sender, block.timestamp);
+        payable(address(this)).transfer(ClaimAmount);
+        
+        emit Claimed(flagUid, msg.sender, ClaimAmount);
     }
 
     /// view, Check if a flag is completed by 
