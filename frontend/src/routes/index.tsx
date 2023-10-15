@@ -1,22 +1,22 @@
 import { Routes, Route } from "react-router-dom";
 
-import Login from "src/pages/login";
-import Sponsor from "src/pages/sponsor";
+import Home from "src/pages/home";
+import Create from "src/pages/create";
 import User from "src/pages/user";
 import Flag from "src/pages/flag";
 
 const rouers: { path: string; el: () => JSX.Element }[] = [
   {
     path: "*",
-    el: Login,
+    el: Home,
   },
   {
-    path: 'Flag',
+    path: 'flag/:flagId',
     el: Flag,
   },
   {
-    path: "sponsor",
-    el: Sponsor,
+    path: "create",
+    el: Create,
   },
   {
     path: "user",

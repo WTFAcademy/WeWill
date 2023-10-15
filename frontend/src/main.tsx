@@ -4,6 +4,7 @@ import AppRouter from 'src/routes'
 import 'virtual:uno.css'
 import 'src/index.css'
 import '@rainbow-me/rainbowkit/styles.css';
+import { Toaster } from 'react-hot-toast';
 
 import {
   getDefaultWallets,
@@ -11,18 +12,13 @@ import {
 } from '@rainbow-me/rainbowkit';
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import {
-  mainnet,
-  polygon,
-  optimism,
-  arbitrum,
-  base,
-  zora,
+  goerli,
 } from 'wagmi/chains';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 
 const { chains, publicClient } = configureChains(
-  [mainnet, polygon, optimism, arbitrum, base, zora],
+  [goerli, ],
   [
     alchemyProvider({ apiKey: '8kSe5qW0tl9fqjXfV3l3aLqzTdFx6EAR' }),
     publicProvider()
@@ -46,6 +42,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <RainbowKitProvider chains={chains}>
       <BrowserRouter>
         <AppRouter />
+        <Toaster />
       </BrowserRouter>
     </RainbowKitProvider>
   </WagmiConfig>
