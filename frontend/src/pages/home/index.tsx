@@ -1,7 +1,7 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
 import { useNavigate } from 'react-router-dom'
-import { graphEndpoint, publicClient } from 'src/config/'
+import { graphEndpoint } from 'src/config/'
 import { formatUnits } from 'viem'
 import { request, gql } from 'graphql-request'
 import { useEffect, useState } from "react";
