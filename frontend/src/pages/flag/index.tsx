@@ -1,6 +1,6 @@
 import { formatUnits, parseEther, encodeAbiParameters, parseAbiParameters, getAddress } from 'viem'
 import { useState, useEffect } from 'react'
-import { account, publicMainnetClient, walletClient } from 'src/config/'
+import { getAccount, publicMainnetClient, walletClient } from 'src/config/'
 import { wagmiAbi } from 'src/config/abi'
 import { useNavigate, useParams } from 'react-router-dom'
 import { graphEndpoint } from 'src/config/'
@@ -96,6 +96,7 @@ function Flag() {
 
     const getFlagJoinUser = async (flagId:string) => {
         const data:any = await request(graphEndpoint, queryFlagJoinUserGql, { flagId } );
+        const account = await getAccount();
         const isJoined = find(data.joineds, function(o:any) {
             const addr1 = getAddress(account);
             const addr2 = getAddress(o.participant);
@@ -107,6 +108,7 @@ function Flag() {
 
     const getFlagComplateUser = async (flagId:string) => {
         const data:any = await request(graphEndpoint, queryFlagComplateUserGql, { flagId } );
+        const account = await getAccount();
         const complated = find(data.completeds, function(o:any) {
             const addr1 = getAddress(account);
             const addr2 = getAddress(o.participant);
@@ -117,6 +119,7 @@ function Flag() {
     
     const getFlagClaimUser = async (flagId:string) => {
         const data:any = await request(graphEndpoint, queryFlagClaimUserGql, { flagId } );
+        const account = await getAccount();
         const claimed = find(data.claimeds, function(o:any) {
             const addr1 = getAddress(account);
             const addr2 = getAddress(o.participant);
@@ -138,6 +141,8 @@ function Flag() {
     // 质押方法
     const staking = async () => {
 
+        const account = await getAccount();
+
         const encodedData = encodeAbiParameters(
             parseAbiParameters('bytes32 flagUid'),
             [flagData.flagUid]
@@ -156,6 +161,8 @@ function Flag() {
     // 申请完成Flag
     const complateFlag = async () => {
         
+        const account = await getAccount();
+
         const encodedData = encodeAbiParameters(
             parseAbiParameters('bytes32 flagUid'),
             [flagData.flagUid]
@@ -173,6 +180,8 @@ function Flag() {
     // 取回保证金
     const cliam = async () => {
         
+        const account = await getAccount();
+
         const encodedData = encodeAbiParameters(
             parseAbiParameters('bytes32 flagUid'),
             [flagData.flagUid]

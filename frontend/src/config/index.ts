@@ -17,6 +17,9 @@ export const publicMainnetClient = createPublicClient({
 })
 
 // JSON-RPC Account
-export const [account] = await walletClient.getAddresses()
+export async function getAccount() {
+    const [account] = await walletClient.getAddresses();
+    return account;
+}
 
 export const graphEndpoint = 'https://api.studio.thegraph.com/query/37543/wewill_goerli/v0.0.1/';
